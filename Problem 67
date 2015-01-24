@@ -1,0 +1,37 @@
+%%Project Euler - Problem 67%%
+clc;
+clear all;
+close all;
+
+%%INPUT ARRAY FROM FILE
+type P67.txt
+fileID = fopen('P67.txt','r');
+formatSpec = '%d ';
+sizeA = [100 100];
+A = fscanf(fileID,formatSpec,sizeA);
+PATH=zeros(100,10);
+fclose(fileID);
+A=A';
+PATH(1,1)=A(1,1);
+for j=2:100 %%Build path limits
+    for i=1:j
+        if i==1
+            PATH(j,i)=A(j,i)+PATH(j-1,i);
+        end
+        if i==j
+            PATH(j,i)=A(j,i)+PATH(j-1,i-1)
+            break
+        end
+    end
+end
+% %% Populate longest path for each blank node starting from j=3,i=2->j
+for j=3:100
+    for i=2:j-1
+        if PATH(j-1,i-1)>PATH(j-1,i)
+            PATH(j,i)=PATH(j-1,i-1)+A(j,i);
+        else
+            PATH(j,i)=PATH(j-1,i)+A(j,i);
+        end
+    end
+end
+     max(PATH,[],2)   
